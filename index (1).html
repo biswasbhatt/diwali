@@ -66,6 +66,15 @@ main,header,footer{position:relative;z-index:2}
 :focus-visible{outline:3px solid var(--gold2);outline-offset:3px}
 
 /* sections */
+section {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+}
+section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
 section{padding:72px 0}
 .eyebrow{font-family:'Cinzel',serif;color:var(--gold);letter-spacing:.34em;font-size:13px;text-transform:uppercase;text-align:center;margin:0}
 h2{font-family:'Playfair Display',serif;font-style:italic;font-weight:600;font-size:clamp(34px,6vw,56px);text-align:center;margin:8px 0 10px;line-height:1.15}
@@ -496,6 +505,17 @@ if(!reduce){
   },2200);
   setTimeout(function(){launch(W*0.2);launch(W*0.8)},600);
 }
+// Add visibility on scroll for sections
+const sectionObserver = new IntersectionObserver((entries)=>{
+  entries.forEach(entry=>{
+    if(entry.isIntersecting){
+      entry.target.classList.add('visible');
+    }
+  });
+}, {threshold:0.1});
+document.querySelectorAll('section').forEach(sec=>sectionObserver.observe(sec));
+
+// Existing click handler for fireworks
 document.addEventListener('click',function(e){
   var t=e.target;
   if(t.closest&&t.closest('button,a,input,.wishcard,.panel'))return;
